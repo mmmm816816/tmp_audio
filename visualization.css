@@ -2,7 +2,7 @@
 
 html {
 	height: 100%;
-	font-family: 'Righteous', cursive;
+	/* font-family: 'Righteous', cursive; */
 	font-size: 10px;
 	background-color: black;
 }
@@ -14,9 +14,9 @@ body {
 	background-image: url(../images/pattern.png);
 }
 
-h1, h2, label {
+label {
   font-size: 3rem;
-  font-family: 'Nova Square', cursive;
+  /* font-family: 'Nova Square', cursive; */
   text-align: center;
   color: black;
   text-shadow: -1px -1px 1px #aaa,
@@ -26,11 +26,6 @@ h1, h2, label {
   margin: 0;
 }
 
-h1 {
-  font-size: 3.5rem;
-  padding-top: 1.2rem;
-}
-
 .wrapper {
 	height: 100%;
 	max-width: 800px;
@@ -38,10 +33,6 @@ h1 {
 }
 
 /* || main UI sections */
-
-header {
-  height: 120px;
-}
 
 canvas {
   border-top: 1px solid black;
@@ -131,7 +122,7 @@ a#activated {
 /* || Checkbox hack to control information box display */
 
 label[for="toggle"] {
-	font-family: 'NotoColorEmoji';
+	/* font-family: 'NotoColorEmoji'; */
 	font-size: 3rem;
 	position: absolute;
 	top: 4px;
@@ -139,37 +130,6 @@ label[for="toggle"] {
 	z-index: 5;
 	cursor: pointer;
 }
-
-input[type=checkbox] {
-   position: absolute;
-   top: -100px;
-}
-
-aside {
-   position: fixed;
-   top: 0;
-   left: 0;
-   padding-top: 1.5rem;
-   text-shadow: 1px 1px 1px black;  
-   width: 100%;
-   height: 100%;
-   transform: translateX(100%);
-   transition: 0.6s all;
-   background-color: #999;
-	background-image: linear-gradient(to top right, rgba(0,0,0,0), rgba(0,0,0,0.5));
-}
-
-aside p, aside li {
-	font-size: 1.6rem;
-	line-height: 1.3;
-	padding: 0rem 2rem 1rem;
-	color: white;
-}
-
-aside li {
-  padding-left: 10px;
-}
-
 
 /* Toggled State of information box */
 
