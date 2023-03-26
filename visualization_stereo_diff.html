@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link href="/styles/visualization.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <div class="wrapper">
+
+    <canvas id="visualizerL" class="visualizer" width="640" height="100"></canvas>
+    <canvas id="visualizerR" class="visualizer" width="640" height="100"></canvas>
+    <canvas id="diff" class="visualizer" width="640" height="100"></canvas>
+
+    <form class="controls">
+      <div>
+        <label for="visual">Visualizer setting</label>
+        <select id="visual" name="visual">
+          <option value="sinewave">Sinewave</option>
+          <option value="frequencybars" selected>Frequency bars</option>
+          <option value="off">Off</option>
+        </select>
+      </div>
+      <div id="actions">
+        <a id="start-btn">Start</a>
+        <a class="mute">Mute</a>
+      </div>
+    </form>
+
+  </div>
+  <script src="scripts/visualization_stereo.js"></script>
+
+</body>
+
+</html>
