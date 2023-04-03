@@ -29,8 +29,8 @@ function start() {
   var drawVisual;
 
 
-  if (navigator.getUserMedia) {
-    navigator.getUserMedia(
+  if (navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia(
       {
         audio: true,
       },
