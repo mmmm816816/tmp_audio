@@ -43,14 +43,14 @@ function start() {
 
     var drawVisual;
 
-    if (navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia(
-            {
-                audio: true,
-            },
+    const constraints = {
+        // video: { frameRate: { ideal: 10, max: 15 } },
+        audio: true,
+    };
 
-            // Success callback
-            function (stream) {
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then((stream) => {
                 source = audioCtx.createMediaStreamSource(stream);
                 //console.log('numOfInputs: ' + source.numberOfInputs); // 0
                 source.connect(splitter); // .connect(destination, outputIndex of input) // .connect(destination, outputIndex, inputIndex of output)
@@ -63,13 +63,10 @@ function start() {
                 merger.connect(audioCtx.destination);
 
                 visualize();
-            },
-
-            // Error callback
-            function (err) {
+            })
+            .catch((err) => {
                 console.log("The following gUM error occured: " + err);
-            }
-        );
+            })
     } else {
         console.log("getUserMedia not supported on your browser!");
     }
@@ -188,11 +185,14 @@ function start() {
                     barHeightL = (dataArrayL[i] + 140) * 2;
                     barHeightR = (dataArrayR[i] + 140) * 2;
                     canvasCtxL.fillStyle =
-                        "rgb(" + Math.floor(barHeightL + 100) + ",50,50)";
+                        // "rgb(" + Math.floor(barHeightL + 100) + ",50,50)";
+                        d3.interpolatePlasma(barHeightL / 200);
                     canvasCtxR.fillStyle =
-                        "rgb(" + Math.floor(barHeightR + 100) + ",50,50)";
+                        // "rgb(" + Math.floor(barHeightR + 100) + ",50,50)";
+                        d3.interpolatePlasma(barHeightR / 200);
                     canvasCtxDiff.fillStyle =
-                        "rgb(" + Math.floor(barHeightR + 100) + ",50,50)";
+                        // "rgb(" + Math.floor(barHeightR + 100) + ",50,50)";
+                        d3.interpolatePlasma(barHeightR / 200);
                     canvasCtxL.fillRect(
                         xL,
                         HEIGHT - barHeightL / 2,

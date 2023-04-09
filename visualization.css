@@ -3,6 +3,7 @@
 html {
 	height: 100%;
 	/* font-family: 'Righteous', cursive; */
+  font-family: 'Courier New';
 	font-size: 10px;
 	background-color: black;
 }
@@ -10,8 +11,8 @@ html {
 body {
 	width: 100%;
 	height: inherit;
-	background-color: #999;
-	background-image: url(../images/pattern.png);
+	background-color: #ccc;
+	/* background-image: url(../images/pattern.png); */
 }
 
 label {
@@ -75,8 +76,8 @@ canvas {
 /* || button styling */
 
 button, form a {    
-    background-color: #0088cc;
-    background-image: linear-gradient(to bottom,  #0088cc 0%,#0055cc 100%); 
+    background-color: #15a;
+    background-image: linear-gradient(to bottom,  #15a 0%,#09f 100%); 
     text-shadow: 1px 1px 1px black;  
     text-align: center;
     color: white;
@@ -103,7 +104,7 @@ button, form a {
 
 #start-btn {
   background-color: #006d12;
-  background-image: linear-gradient(to bottom, #006d12 0%, #00580f 100%);
+  background-image: linear-gradient(to bottom, #0a1 0%, #0f1 100%);
 }
 
 button:hover, button:focus, form a:hover, form a:focus {
@@ -116,7 +117,7 @@ button:active, form a:active {
 
 a#activated {
   background-color: #fff;
-  background-image: linear-gradient(to bottom,  #f00 0%,#a06 100%);
+  background-image: linear-gradient(to bottom,  #a01 0%,#f01 100%);
 }
 
 /* || Checkbox hack to control information box display */
