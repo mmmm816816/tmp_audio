@@ -14,12 +14,17 @@
 <body>
     <!-- <button id="play">play</button>
     <button id="pause">pause</button> -->
-    <audio src="media/gs-16b-2c-44100hz.wav"></audio>
+    <audio src="media/clip8.aac"></audio>
+    <!-- <audio src="media/clip9.aac"></audio> -->
+    <!-- <audio src="media/gs-16b-2c-44100hz.wav"></audio> -->
     <!-- <audio src="media/StarWars3.wav"></audio> -->
     <div class="wrapper">
 
+        <label for="visualizerL">Left</label>
         <canvas id="visualizerL" class="visualizer" width="640" height="100"></canvas>
+        <label for="visualizerR">Right</label>
         <canvas id="visualizerR" class="visualizer" width="640" height="100"></canvas>
+        <label for="diff">Diff</label>
         <canvas id="diff" class="visualizer" width="640" height="100"></canvas>
 
         <form class="controls">
@@ -185,9 +190,9 @@
                         var xL = 0;
                         var xR = 0;
                         for (var i = 0; i < bufferLengthL; i++) { // assuming that bufferLengthL -eq bufferLengthR
-                            var vL = dataArrayL[i] * 200.0;
+                            var vL = dataArrayL[i] * 75.0; // 75: scale of amplitude
                             var yL = HEIGHT / 2 + vL;
-                            var vR = dataArrayR[i] * 200.0;
+                            var vR = dataArrayR[i] * 75.0;
                             var yR = HEIGHT / 2 + vR;
                             if (i === 0) {
                                 canvasCtxL.moveTo(xL, yL);
@@ -247,8 +252,8 @@
                         canvasCtxDiff.fillRect(0, 0, WIDTH, HEIGHT);
 
                         for (var i = 0; i < bufferLengthL; i++) {
-                            barHeightL = (dataArrayL[i] + 140) * 2;
-                            barHeightR = (dataArrayR[i] + 140) * 2;
+                            barHeightL = (dataArrayL[i] + 110) * 2; // 140
+                            barHeightR = (dataArrayR[i] + 110) * 2;
                             canvasCtxL.fillStyle =
                                 // "rgb(" + Math.floor(barHeightL + 100) + ",50,50)";
                                 d3.interpolatePlasma(barHeightL / 200);
