@@ -1,3 +1,0 @@
-ffmpeg -stream_loop 9 -i sawtooth-440Hz-1min.mp4 -c:v copy sawtooth-440Hz-1min-9loops.mp4
-x ffmpeg -i sawtooth-440Hz-1min-9loops.mp4 -i sawtooth-440Hz-10mins.wav -map 0 -map 1:a -c:v copy -shortest sawtooth-440Hz-1min-9loops-audio.mp4
-ffmpeg -i sawtooth-440Hz-1min-9loops.mp4 -i sawtooth-440Hz-10mins.wav -map 0:v -map 1:a -c:v copy -shortest sawtooth-440Hz-1min-9loops-audio.mp4
