@@ -1,1 +1,43 @@
 ｔ
+
+- Excel
+    - ODBC
+        - 管理者権限でインストールが必要なだけでなくExcelから設定するときに見えない
+    - Python Add-on
+        - dfなど使えるがexcelの範囲内であり、power queryの拡張という感覚が強い
+    - VBA
+        - 巨大なテキストを読み込むことはできるがjoinできない
+- BI tool
+    - 簡易データアップロードorリンクバージョンとServerバージョンが存在し、データが大きくなったり、速度を求めるとServerを使わないといけないような設定が多い
+    - LookerStudio:
+        - 100Gとは言うが結局処理できるのは50MBとか100MBのテキストやスプレッドシート
+        - joinしたものをjoinすることはできず、一度に複数テーブルをjoinする必要がある
+        - joinしたものに数式を追加することはできないので元データの方で追加する
+            - joinした2つのテーブルの条件をもとに数式を作れない
+    - Tableau
+    - PowerBI
+- アプリケーションサーバ
+    - Nodejsなどで自作
+        - 一番管理コストがかかると同時に分散処理、セキュリティなど考慮する必要がある
+    - Google Apps Script + Local Database
+        - Googleとデータベースを共有していない（ネットワーク設定など必要）
+        - HttpsがGoogleのサービスには必須である一方でHttp
+    - Google Apps Script + Firebase
+        - join, sum向きでなく、履歴管理や機械学習用入力データと利用する分にはいい
+        - 書き込み読み込みを全てのユーザに対して行う処理では費用が爆発してしまう
+- Pythonでアプリケーション
+    - exe化するため現状と変わらない
+- fdw: foreign data wrapper
+    - fdwの権限と大元アクセス権限を合わせにいかないといけない
+    - あくまで読みにゆくベースであり書き込みは別処理になる
+    - postgresql fdw, file fdw, ldap fdwどれも同じである
+- Offline app in browser
+    - alasql
+        - バグが多い。信用できない
+    - sqlite wasm
+        - 高速処理できる
+        - 2GB（4GB）を超えないように→PowerQuery is better
+- Web extension (bluetooth/serial)
+    - どちらも利用できない設定になっており通信手段として利用することができない
+
+→作らない構成、金額をかけない、で選ぶとDBeaverを配布するかPowerQueryの2択なのかな
