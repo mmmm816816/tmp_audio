@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>SQLite wasm</title>
+
+    <!-- SQL wasm file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.min.js"></script>
+
+    <!-- jQuery library file -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+    <!-- Datatable plugin CSS file -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
+
+    <!-- Datatable plugin JS library file -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+
+    <!-- Bootstrap5 CSS file -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h3>SQLite executer</h3>
+        <input class="form-control" type="file" id="file1" accept=".sqlite">
+        <br>
+        <textarea class="form-control" name="sql" id="sql" rows="5" cols="100">--SELECT * from users, phone on users.id = phone.id;
+SELECT * from users;</textarea>
+        <br>
+        <div class="input-group">
+            <button class="btn btn-outline-secondary" id="Execute" onclick="executeStmt()">Execute</button>
+            <button class="btn btn-outline-secondary" id="export2DB" onclick="export2DB()">Export DB</button>
+            <button class="btn btn-outline-secondary" id="export2Csv" onclick="export2Csv('my.csv')">Export CSV</button>
+        </div>
+        <!-- <br> -->
+        <!-- <p id="res"></p> -->
+        <br>
+        <p>Results: *Limit 1000</p>
+        <div id="resDiv"></div>
+    </div>
+    <script>
+        let db
+        let res
+        const upload = {
+            /**
+            * initUpload
+            * @param
+            *
+            * @return
+            */
+            initUpload: function () {
+                const dbFileElm = document.getElementById('file1');
+                initSqlJs({
+                    locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/${file}`
+                }).then(SQL => {
+                    dbFileElm.onchange = () => {
+                        const f = dbFileElm.files[0];
+                        const r = new FileReader();
+                        r.onload = function () {
+                            const Uints = new Uint8Array(r.result);
+                            db = new SQL.Database(Uints);
+                            // res = JSON.stringify(db.exec("SELECT sqlite_version();"));
+                            //console.log(res);
+                            // res = JSON.stringify(db.exec(`SELECT * FROM users;`));
+                            //console.log(res)
+                        }
+                        r.readAsArrayBuffer(f);
+                    }
+                });
+            },
+        }
+
+        upload.initUpload();
+
+        function executeStmt() {
+            res = db.exec(document.getElementById('sql').value);
+
+            // document.getElementById('res').textContent = JSON.stringify(res);
+
+            var html = ''
+
+            // thead
+            html += '<table id="resTable" class="table table-striped" style="width:100%" border>\r\n';
+            html += '<thead>\r\n';
+            html += '<tr>\r\n';
+            for (let i in res[0]['columns']) {
+                html += '<th>' + res[0]['columns'][i] + '</th>\r\n';
+            }
+            html += '</tr>\r\n';
+            html += '</thead>\r\n';
+
+            // tbody
+            html += '<tbody>\r\n';
+            let resValues = res[0]['values'].slice(0, 1000)
+            for (let i in resValues) {
+                html += '<tr>\r\n';
+                for (let j in resValues[i]) {
+                    html += '<td>' + resValues[i][j] + '</td>\r\n';
+                }
+                html += '</tr>\r\n';
+            }
+            html += '</tbody>\r\n';
+
+            // tfoot
+            html += '<tfoot>\r\n';
+            html += '<tr>\r\n';
+            for (let i in res[0]['columns']) {
+                html += '<th>' + res[0]['columns'][i] + '</th>\r\n';
+            }
+            html += '</tr>\r\n';
+            html += '</tfoot>\r\n';
+            html += '</table>\r\n';
+
+            document.getElementById('resDiv').innerHTML = html
+            $('#resTable').DataTable({})
+        }
+
+        //create table phone (id integer, tel text);
+        //insert into phone values (1, '080');
+        //select * from users t1 join phone t2 on t1.id = t2.id;
+        function export2DB() {
+            const uint8Array = db.export();
+            //console.log(uint8Array);
+            const blob = new Blob([uint8Array], { type: 'application/octet-binary' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `hoge.sqlite`;
+            a.click();
+            a.remove()
+        }
+
+        function export2Csv(filename) {
+            // let csvContent = [...res[0]['values']]
+            // csvContent.unshift(res[0]['columns'])
+
+            // let encodedUri = encodeURI(csvContent);
+            // let link = document.createElement("a");
+            // link.setAttribute("href", encodedUri);
+            // link.setAttribute("download", "my_data.csv");
+            // document.body.appendChild(link);
+            // link.click();
+            // link.remove()
+
+            let rows = [...res[0]['values']]
+            rows.unshift(res[0]['columns'])
+
+            var processRow = function (row) {
+                var finalVal = '';
+                for (var j = 0; j < row.length; j++) {
+                    var innerValue = row[j] === null ? '' : row[j].toString();
+                    if (row[j] instanceof Date) {
+                        innerValue = row[j].toLocaleString();
+                    };
+                    var result = innerValue.replace(/"/g, '""');
+                    if (result.search(/("|,|\n)/g) >= 0)
+                        result = '"' + result + '"';
+                    if (j > 0)
+                        finalVal += ',';
+                    finalVal += result;
+                }
+                return finalVal + '\n';
+            };
+
+            var csvFile = '';
+            for (var i = 0; i < rows.length; i++) {
+                csvFile += processRow(rows[i]);
+            }
+
+            var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+            if (navigator.msSaveBlob) { // IE 10+
+                navigator.msSaveBlob(blob, filename);
+            } else {
+                var link = document.createElement("a");
+                if (link.download !== undefined) { // feature detection
+                    // Browsers that support HTML5 download attribute
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", filename);
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            }
+        }
+    </script>
+
+    <!-- Bootstrap5 JS Library file -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
